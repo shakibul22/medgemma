@@ -26,6 +26,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.clear-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #f85149 !important;
+  padding: 0.35rem 0.6rem !important;
+  border-radius: 0.4rem;
+  opacity: 0.7;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.clear-all-btn:hover {
+  opacity: 1;
+  background: rgba(248, 81, 73, 0.12) !important;
 }
 
 .sidebar-title {
@@ -49,10 +73,42 @@
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   transition: background 0.2s, transform 0.1s;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.conv-title {
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: 1px solid transparent;
+}
+
+.conv-delete-btn {
+  flex-shrink: 0;
+  opacity: 0;
+  color: #f85149 !important;
+  padding: 0.2rem !important;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.conv-item:hover .conv-delete-btn {
+  opacity: 0.6;
+}
+
+.conv-delete-btn:hover {
+  opacity: 1 !important;
+  background: rgba(248, 81, 73, 0.12) !important;
+}
+
+.conv-empty {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1.5rem 1rem;
+  opacity: 0.6;
 }
 
 .conv-item:hover {
@@ -463,4 +519,290 @@
   color: var(--accent-primary);
   opacity: 0.8;
   text-align: center;
+}
+
+/* ─── Encryption Panel Toggle Button ─── */
+.enc-toggle-btn {
+  position: relative;
+}
+
+.enc-toggle-btn.active {
+  color: var(--accent-primary);
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.enc-toggle-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--accent-primary);
+  color: #000;
+  font-size: 0.55rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ─── Encryption Panel Wrapper ─── */
+.enc-panel-wrapper {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.enc-panel-wrapper.open {
+  width: 320px;
+}
+
+/* ─── Encryption Panel ─── */
+.enc-panel {
+  width: 320px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.enc-panel-header {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.enc-panel-count {
+  margin-left: auto;
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--accent-primary);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.1rem 0.45rem;
+}
+
+.enc-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.enc-panel-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.enc-panel-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+/* ─── Empty State ─── */
+.enc-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.enc-empty p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  max-width: 200px;
+}
+
+/* ─── Encryption Record Card ─── */
+.enc-record {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.enc-record:hover {
+  border-color: rgba(63, 185, 80, 0.25);
+}
+
+.enc-record-header {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: background 0.2s;
+}
+
+.enc-record-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.enc-record-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+.enc-record-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ─── Status Badges ─── */
+.enc-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.enc-badge.ok {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--accent-primary);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.enc-badge.loading {
+  background: rgba(100, 160, 255, 0.15);
+  color: #64a0ff;
+  border: 1px solid rgba(100, 160, 255, 0.3);
+}
+
+.enc-badge.error {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.3);
+}
+
+/* ─── Record Body ─── */
+.enc-record-body {
+  padding: 0 0.85rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.enc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.enc-field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.35rem;
+}
+
+.enc-dim {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.enc-field-value {
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-main);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  word-break: break-all;
+}
+
+.enc-field-value.mono {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.72rem;
+  color: #64a0ff;
+}
+
+.enc-field-value.key {
+  color: var(--accent-primary);
+}
+
+.enc-field-value.dim {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+/* ─── Loading Placeholder ─── */
+.enc-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.enc-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.enc-error-msg {
+  font-size: 0.75rem;
+  color: #f85149;
+  padding: 0.5rem 0;
+}
+
+/* ─── Responsive: hide enc panel on small screens ─── */
+@media (max-width: 1024px) {
+  .enc-panel-wrapper.open {
+    width: 0;
+    display: none;
+  }
 }

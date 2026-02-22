@@ -1,4 +1,5 @@
 import { chatApi } from '../api/chatApi';
+import { encryptionApi } from '../api/encryptionApi';
 import { useCallback, useRef, useState } from 'react';
 
 /**
@@ -8,13 +9,16 @@ import { useCallback, useRef, useState } from 'react';
  *  1. User message → Gemini reformulation
  *  2. Reformulated query → Kaggle MedGemma endpoint (streamed)
  *  3. Session ID is persisted per conversation for multi-turn memory.
+ *  4. In parallel: user text → HF encryption API → encryption log entry
  */
 export const useChat = (apiKey, conversations, updateMessages, updateTitle, updateSession) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [inferenceTime, setInferenceTime] = useState(0);
+    const [encryptionRecords, setEncryptionRecords] = useState([]);
 
     const abortControllerRef = useRef(null);
+    const msgCountRef = useRef(0);
 
     const sendMessage = useCallback(async (activeId, text) => {
         if (!text.trim() || isLoading) return;
@@ -51,6 +55,29 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
         const activeConv = conversations.find(c => c.id === activeId);
         const history = activeConv ? activeConv.messages : [];
         const sessionId = activeConv?.medgemmaSessionId || null;
+
+        // --- Encryption: fire-and-forget in parallel ---
+        const encId = crypto.randomUUID();
+        msgCountRef.current += 1;
+        const msgIndex = msgCountRef.current;
+
+        setEncryptionRecords(prev => [
+            ...prev,
+            { id: encId, index: msgIndex, loading: true, error: null, data: null },
+        ]);
+
+        encryptionApi.processText(text)
+            .then(data => {
+                setEncryptionRecords(prev =>
+                    prev.map(r => r.id === encId ? { ...r, loading: false, data } : r)
+                );
+            })
+            .catch(err => {
+                setEncryptionRecords(prev =>
+                    prev.map(r => r.id === encId ? { ...r, loading: false, error: err.message } : r)
+                );
+            });
+        // --- End encryption ---
 
         try {
             const { newSessionId } = await chatApi.sendMessage({
@@ -103,5 +130,6 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
         sendMessage,
         stopInference,
         setError,
+        encryptionRecords,
     };
 };

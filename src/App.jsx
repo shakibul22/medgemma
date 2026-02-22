@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Stethoscope, Plus, Info, Menu, X, Sparkles, Key } from 'lucide-react';
+import { Stethoscope, Plus, Info, Menu, X, Sparkles, Key, ShieldCheck, Trash2 } from 'lucide-react';
 import { Background } from './components/Background';
 import { Badge } from './components/Badge';
 import { ChatMessage } from './components/ChatMessage';
 import { ChatInput } from './components/ChatInput';
+import { EncryptionPanel } from './components/EncryptionPanel';
 import { useChat } from './hooks/useChat';
 import './App.css';
 
@@ -23,6 +24,7 @@ export default function App() {
   });
   const [input, setInput] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [encPanelOpen, setEncPanelOpen] = useState(true);
 
   const bottomRef = useRef(null);
 
@@ -52,7 +54,7 @@ export default function App() {
     );
   }, []);
 
-  const { isLoading, error, inferenceTime, sendMessage, stopInference, setError } = useChat(
+  const { isLoading, error, inferenceTime, sendMessage, stopInference, setError, encryptionRecords } = useChat(
     apiKey,
     conversations,
     updateMessages,
@@ -76,6 +78,19 @@ export default function App() {
     setSidebarOpen(false);
   };
 
+  const handleDeleteConv = (id) => {
+    setConversations(prev => prev.filter(c => c.id !== id));
+    if (activeId === id) {
+      const remaining = conversations.filter(c => c.id !== id);
+      setActiveId(remaining[0]?.id || null);
+    }
+  };
+
+  const handleClearAll = () => {
+    setConversations([]);
+    setActiveId(null);
+  };
+
   const handleSend = () => {
     if (!activeId) {
       const id = generateId();
@@ -96,16 +111,38 @@ export default function App() {
         <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
           <div className="sidebar-header">
             <h2 className="sidebar-title">Chats</h2>
-            <button className="icon-btn" onClick={() => setSidebarOpen(false)}><X size={18} /></button>
+            <div className="sidebar-header-actions">
+              {conversations.length > 0 && (
+                <button
+                  className="icon-btn clear-all-btn"
+                  onClick={handleClearAll}
+                  title="Clear all conversations"
+                >
+                  <Trash2 size={15} />
+                  <span>Clear all</span>
+                </button>
+              )}
+              <button className="icon-btn" onClick={() => setSidebarOpen(false)}><X size={18} /></button>
+            </div>
           </div>
           <div className="conversations-list">
+            {conversations.length === 0 && (
+              <p className="conv-empty">No conversations yet.</p>
+            )}
             {conversations.map(c => (
               <div
                 key={c.id}
                 className={`conv-item ${c.id === activeId ? 'active' : ''}`}
                 onClick={() => { setActiveId(c.id); setSidebarOpen(false); }}
               >
-                {c.title}
+                <span className="conv-title">{c.title}</span>
+                <button
+                  className="icon-btn conv-delete-btn"
+                  onClick={(e) => { e.stopPropagation(); handleDeleteConv(c.id); }}
+                  title="Delete conversation"
+                >
+                  <Trash2 size={13} />
+                </button>
               </div>
             ))}
           </div>
@@ -142,6 +179,16 @@ export default function App() {
             </div>
             <Badge />
             <div className="header-actions">
+              <button
+                className={`icon-btn enc-toggle-btn ${encPanelOpen ? 'active' : ''}`}
+                onClick={() => setEncPanelOpen(v => !v)}
+                title={encPanelOpen ? 'Hide Encryption Panel' : 'Show Encryption Panel'}
+              >
+                <ShieldCheck size={20} />
+                {encryptionRecords.length > 0 && (
+                  <span className="enc-toggle-count">{encryptionRecords.length}</span>
+                )}
+              </button>
               <button className="icon-btn" onClick={handleNewChat} title="New Chat">
                 <Plus size={20} />
               </button>
@@ -157,7 +204,7 @@ export default function App() {
                 <h2 className="welcome-title">How can I assist you today?</h2>
                 <p className="welcome-subtitle">
                   MedGemma is a specialized medical assistant. Describe your symptoms or ask a
-                  medical question — your query is refined by  by MedGemma.
+                  medical question — your query is refined by MedGemma.
                 </p>
               </div>
             ) : (
@@ -203,10 +250,15 @@ export default function App() {
             <div style={{ textAlign: 'center', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
               <Info size={12} color="var(--text-muted)" />
               <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                Powered by  MedGemma. For informational purposes only — always consult a qualified healthcare professional.
+                Powered by MedGemma. For informational purposes only — always consult a qualified healthcare professional.
               </span>
             </div>
           </footer>
+        </div>
+
+        {/* Encryption Panel */}
+        <div className={`enc-panel-wrapper ${encPanelOpen ? 'open' : ''}`}>
+          <EncryptionPanel records={encryptionRecords} />
         </div>
       </div>
     </>
