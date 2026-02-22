@@ -54,7 +54,7 @@ export default function App() {
     );
   }, []);
 
-  const { isLoading, error, inferenceTime, sendMessage, stopInference, setError, encryptionRecords } = useChat(
+  const { isLoading, error, inferenceTime, sendMessage, stopInference, setError, encryptionRecords, clearAllEncryptionRecords, clearEncryptionRecordsByConv } = useChat(
     apiKey,
     conversations,
     updateMessages,
@@ -80,6 +80,7 @@ export default function App() {
 
   const handleDeleteConv = (id) => {
     setConversations(prev => prev.filter(c => c.id !== id));
+    clearEncryptionRecordsByConv(id);
     if (activeId === id) {
       const remaining = conversations.filter(c => c.id !== id);
       setActiveId(remaining[0]?.id || null);
@@ -89,6 +90,7 @@ export default function App() {
   const handleClearAll = () => {
     setConversations([]);
     setActiveId(null);
+    clearAllEncryptionRecords();
   };
 
   const handleSend = () => {

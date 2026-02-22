@@ -70,7 +70,7 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
 
         setEncryptionRecords(prev => [
             ...prev,
-            { id: encId, index: msgIndex, loading: true, error: null, data: null },
+            { id: encId, convId: activeId, index: msgIndex, loading: true, error: null, data: null },
         ]);
 
         encryptionApi.processText(text)
@@ -130,6 +130,14 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
         }
     }, []);
 
+    const clearAllEncryptionRecords = useCallback(() => {
+        setEncryptionRecords([]);
+    }, []);
+
+    const clearEncryptionRecordsByConv = useCallback((convId) => {
+        setEncryptionRecords(prev => prev.filter(r => r.convId !== convId));
+    }, []);
+
     return {
         isLoading,
         error,
@@ -138,5 +146,7 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
         stopInference,
         setError,
         encryptionRecords,
+        clearAllEncryptionRecords,
+        clearEncryptionRecordsByConv,
     };
 };
