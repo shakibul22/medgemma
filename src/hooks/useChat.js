@@ -1,6 +1,6 @@
 import { chatApi } from '../api/chatApi';
 import { encryptionApi } from '../api/encryptionApi';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Hook to manage MedGemma Chat state and operations.
@@ -15,7 +15,14 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [inferenceTime, setInferenceTime] = useState(0);
-    const [encryptionRecords, setEncryptionRecords] = useState([]);
+    const [encryptionRecords, setEncryptionRecords] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('mg_enc_records') || '[]'); } catch { return []; }
+    });
+
+    // Persist encryption records
+    useEffect(() => {
+        localStorage.setItem('mg_enc_records', JSON.stringify(encryptionRecords));
+    }, [encryptionRecords]);
 
     const abortControllerRef = useRef(null);
     const msgCountRef = useRef(0);
