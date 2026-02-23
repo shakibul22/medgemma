@@ -18,6 +18,15 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;
   backdrop-filter: blur(20px);
+  position: fixed;
+  left: -300px;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar.open {
+  left: 0;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar-header {
@@ -192,25 +201,6 @@
 
 .menu-btn {
   margin-right: 1.25rem;
-  display: none !important;
-  /* Managed by media query */
-}
-
-@media (max-width: 1024px) {
-  .menu-btn {
-    display: flex !important;
-  }
-
-  .sidebar {
-    position: absolute;
-    left: -300px;
-    height: 100%;
-  }
-
-  .sidebar.open {
-    left: 0;
-    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
-  }
 }
 
 /* Header */
@@ -546,6 +536,104 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+/* ─── Paper Abstract Toggle ─── */
+.paper-toggle-wrapper {
+  position: relative;
+}
+
+.paper-toggle-btn.active {
+  color: var(--accent-primary);
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.paper-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 400px;
+  max-height: 520px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.paper-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.paper-dropdown-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  letter-spacing: 0.05em;
+}
+
+.paper-full-title {
+  padding: 0.75rem 1.25rem 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.paper-abstract-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.paper-abstract-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.paper-abstract-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.paper-abstract {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.paper-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--glass-border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.paper-link:hover {
+  background: rgba(63, 185, 80, 0.08);
+}
+
+@media (max-width: 480px) {
+  .paper-dropdown {
+    width: calc(100vw - 2rem);
+    right: -1rem;
+  }
 }
 
 /* ─── Encryption Panel Wrapper ─── */

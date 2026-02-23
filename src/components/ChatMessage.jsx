@@ -31,7 +31,7 @@ export const ChatMessage = ({ message, isLast, isStreaming }) => {
             <div className="message-header">
                 <div className="message-sender">
                     {isUser ? <User size={14} /> : <Stethoscope size={14} />}
-                    <span>{isUser ? 'Patient' : 'MedGemma'}</span>
+                    <span>{isUser ? 'Patient' : 'HypoCrypt'}</span>
                 </div>
                 {message.isEncrypted && (
                     <div className="message-encryption-tag">

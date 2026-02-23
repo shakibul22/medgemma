@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Stethoscope, Plus, Info, Menu, X, Sparkles, Key, ShieldCheck, Trash2 } from 'lucide-react';
+import { Stethoscope, Plus, Info, Menu, X, Sparkles, Key, ShieldCheck, Trash2, FileText, ExternalLink } from 'lucide-react';
 import { Background } from './components/Background';
 import { Badge } from './components/Badge';
 import { ChatMessage } from './components/ChatMessage';
@@ -25,6 +25,7 @@ export default function App() {
   const [input, setInput] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [encPanelOpen, setEncPanelOpen] = useState(true);
+  const [paperPanelOpen, setPaperPanelOpen] = useState(false);
 
   const bottomRef = useRef(null);
 
@@ -176,11 +177,45 @@ export default function App() {
               </button>
               <div className="logo-section">
                 <Stethoscope size={24} color="var(--accent-primary)" />
-                <h1 className="logo-text">Med<span>Gemma</span></h1>
+                <h1 className="logo-text">Hypo<span>Crypt</span></h1>
               </div>
             </div>
             <Badge />
             <div className="header-actions">
+              <div className="paper-toggle-wrapper">
+                <button
+                  className={`icon-btn paper-toggle-btn ${paperPanelOpen ? 'active' : ''}`}
+                  onClick={() => setPaperPanelOpen(v => !v)}
+                  title={paperPanelOpen ? 'Hide Paper Abstract' : 'Show Paper Abstract'}
+                >
+                  <FileText size={20} />
+                </button>
+                {paperPanelOpen && (
+                  <div className="paper-dropdown">
+                    <div className="paper-dropdown-header">
+                      <h3>STEALTH</h3>
+                      <button className="icon-btn" onClick={() => setPaperPanelOpen(false)}><X size={14} /></button>
+                    </div>
+                    <p className="paper-full-title">
+                      Secure Transformer for Encrypted Alignment of Latent Text Embeddings via Semantic Isomorphism Enforcement (SIE) Loss Function
+                    </p>
+                    <div className="paper-abstract-scroll">
+                      <p className="paper-abstract">
+                        The pervasive use of large language models (LLMs) on sensitive data presents a critical privacy challenge, as traditional encryption renders data unusable for inference. We introduce STEALTH, a 120M secure transformer framework designed to process encrypted text while preserving its semantic utility under an authorized-key threat model (no decryption or side-channel access). The core innovation of STEALTH is the Semantic Isomorphism Enforcement (SIE) loss function, a loss that trains the model to learn a topology-preserving mapping between encrypted text embeddings and their original plaintext latent space. This encourages preservation of semantic relationships and topological structure in the encrypted domain. Using retrieval-based reconstruction from a domain-aligned plaintext corpus, STEALTH achieves near-perfect semantic retrieval (BLEU score of 1.0 under full-corpus coverage in our experiments) and enables accurate privacy-preserving clustering on encrypted embeddings. We evaluate STEALTH across 44 datasets spanning general language understanding, healthcare, finance, legal, e-commerce, programming, content analysis, reading comprehension, and corporate communication domains with 16 encryption schemes (704 experimental conditions), establishing a comprehensive benchmark for privacy-preserving NLP on encrypted text. Performance depends on domain alignment between encrypted inputs and the indexed plaintext corpus. Our results demonstrate that, with well-aligned domain indexes and retrieval support, models can perform effective NLP on encrypted data without direct decryption.
+                      </p>
+                    </div>
+                    <a
+                      className="paper-link"
+                      href="https://openreview.net/forum?id=73PV17dVCM"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ExternalLink size={14} />
+                      View on OpenReview
+                    </a>
+                  </div>
+                )}
+              </div>
               <button
                 className={`icon-btn enc-toggle-btn ${encPanelOpen ? 'active' : ''}`}
                 onClick={() => setEncPanelOpen(v => !v)}
@@ -205,8 +240,8 @@ export default function App() {
                 </div>
                 <h2 className="welcome-title">How can I assist you today?</h2>
                 <p className="welcome-subtitle">
-                  MedGemma is a specialized medical assistant. Describe your symptoms or ask a
-                  medical question — your query is refined by MedGemma.
+                  HypoCrypt is a specialized medical assistant. Describe your symptoms or ask a
+                  medical question — your query is refined by HypoCrypt.
                 </p>
               </div>
             ) : (
@@ -252,7 +287,7 @@ export default function App() {
             <div style={{ textAlign: 'center', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
               <Info size={12} color="var(--text-muted)" />
               <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                Powered by MedGemma. For informational purposes only — always consult a qualified healthcare professional.
+                Powered by HypoCrypt. For informational purposes only — always consult a qualified healthcare professional.
               </span>
             </div>
           </footer>
