@@ -6,12 +6,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * Hook to manage MedGemma Chat state and operations.
  *
  * Flow:
- *  1. User message → Gemini reformulation
- *  2. Reformulated query → Kaggle MedGemma endpoint (streamed)
- *  3. Session ID is persisted per conversation for multi-turn memory.
- *  4. In parallel: user text → HF encryption API → encryption log entry
+ *  1. User message → Kaggle MedGemma endpoint (streamed directly)
+ *  2. Session ID is persisted per conversation for multi-turn memory.
+ *  3. In parallel: user text → HF encryption API → encryption log entry
  */
-export const useChat = (apiKey, conversations, updateMessages, updateTitle, updateSession) => {
+export const useChat = (conversations, updateMessages, updateTitle, updateSession) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [inferenceTime, setInferenceTime] = useState(0);
@@ -29,10 +28,6 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
 
     const sendMessage = useCallback(async (activeId, text) => {
         if (!text.trim() || isLoading) return;
-        if (!apiKey && !import.meta.env.VITE_GEMINI_API_KEY) {
-            setError('Gemini API key is required for query reformulation.');
-            return;
-        }
 
         setIsLoading(true);
         setError(null);
@@ -58,9 +53,8 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
             { id: aiMsgId, role: 'assistant', content: '', timestamp: Date.now() },
         ]);
 
-        // Get current conversation history (before the two new messages) and session ID
+        // Get the persisted MedGemma session ID for multi-turn memory
         const activeConv = conversations.find(c => c.id === activeId);
-        const history = activeConv ? activeConv.messages : [];
         const sessionId = activeConv?.medgemmaSessionId || null;
 
         // --- Encryption: fire-and-forget in parallel ---
@@ -88,9 +82,7 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
 
         try {
             const { newSessionId } = await chatApi.sendMessage({
-                apiKey: apiKey || import.meta.env.VITE_GEMINI_API_KEY,
                 message: text,
-                history,
                 sessionId,
                 signal: abortControllerRef.current.signal,
                 onChunk: (accumulated) => {
@@ -122,7 +114,7 @@ export const useChat = (apiKey, conversations, updateMessages, updateTitle, upda
             setIsLoading(false);
             abortControllerRef.current = null;
         }
-    }, [apiKey, conversations, isLoading, updateMessages, updateTitle, updateSession]);
+    }, [conversations, isLoading, updateMessages, updateTitle, updateSession]);
 
     const stopInference = useCallback(() => {
         if (abortControllerRef.current) {

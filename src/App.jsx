@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Stethoscope, Plus, Info, Menu, X, Sparkles, Key, ShieldCheck, Trash2, FileText, ExternalLink } from 'lucide-react';
+import { Stethoscope, Plus, Info, Menu, X, Sparkles, ShieldCheck, Trash2, FileText, ExternalLink } from 'lucide-react';
 import { Background } from './components/Background';
 import { Badge } from './components/Badge';
 import { ChatMessage } from './components/ChatMessage';
@@ -13,7 +13,6 @@ function generateId() {
 }
 
 export default function App() {
-  const [apiKey, setApiKey] = useState(() => import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem('mg_api_key') || '');
   const [conversations, setConversations] = useState(() => {
     try { return JSON.parse(localStorage.getItem('mg_convs') || '[]') } catch { return [] }
   });
@@ -33,9 +32,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('mg_convs', JSON.stringify(conversations));
   }, [conversations]);
-  useEffect(() => {
-    localStorage.setItem('mg_api_key', apiKey);
-  }, [apiKey]);
 
   const updateMessages = useCallback((convId, updater) => {
     setConversations(prev =>
@@ -56,7 +52,6 @@ export default function App() {
   }, []);
 
   const { isLoading, error, inferenceTime, sendMessage, stopInference, setError, encryptionRecords, clearAllEncryptionRecords, clearEncryptionRecordsByConv } = useChat(
-    apiKey,
     conversations,
     updateMessages,
     updateTitle,
@@ -149,24 +144,7 @@ export default function App() {
               </div>
             ))}
           </div>
-          <div className="sidebar-footer">
-            <div className="api-key-config">
-              <label><Key size={12} /> API Key Source</label>
-              <div className="api-key-status">
-                {import.meta.env.VITE_GEMINI_API_KEY ? (
-                  <span className="source-badge env">Loaded from .env</span>
-                ) : (
-                  <input
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    placeholder="Enter API Key..."
-                    className="key-input"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+
         </aside>
 
         <div className="app-container">
