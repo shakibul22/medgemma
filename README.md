@@ -1,12 +1,12 @@
-# 🩺 MedGemma Chat
+# 🩺 Hypocrypt Chat
 
 **A privacy-aware, multilingual medical AI assistant utilizing latent chain-of-thought reasoning.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel&logoColor=white)](https://medgemma-brown.vercel.app/)
-[![Pitch Video](https://img.shields.io/badge/Pitch_Video-Vimeo-blue?logo=vimeo&logoColor=white)](https://vimeo.com/1167562796?fl=ip&fe=ec)
+[![Pitch Video](https://img.shields.io/badge/Pitch_Video-YouTube-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=R7p1aFjOZJ0&t=1s)
 [![Backend Engine](https://img.shields.io/badge/Backend-Kaggle_Notebook-20BEFF?logo=kaggle&logoColor=white)](https://kaggle.com/code/nlashraf/med-try)
 
-**MedGemma Chat** is an official submission for the [Google Health AI Developer Foundations (HAI-DEF) Kaggle Hackathon](https://www.kaggle.com/competitions/medgemma-impact-challenge).
+**Hypocrypt Chat** is an official submission for the [Google Health AI Developer Foundations (HAI-DEF) Kaggle Hackathon](https://www.kaggle.com/competitions/medgemma-impact-challenge).
 
 It provides a secure, highly responsive streaming interface for patients to triage symptoms using `google/medgemma-1.5-4b-it`. By deploying an open-weight model through a controlled pipeline, we solve the privacy liability of routing sensitive Protected Health Information (PHI) through closed-source APIs, while providing clinical-grade conversational AI.
 
@@ -56,7 +56,7 @@ Because the model requires a GPU for real-time inference, the backend is designe
 
 ### 1. Start the Backend (Kaggle)
 
-1. Open the [Kaggle Notebook Backend](https://kaggle.com/code/nlashraf/med-try).
+1. Open the [Kaggle Notebook Backend](https://www.kaggle.com/code/shakibul22/med-try).
 2. Start the notebook session — ensure the **GPU T4 x2** or **P100** accelerator is enabled.
 3. Run all cells to spin up the FastAPI server. The final cell will output an ngrok public URL. Keep this URL handy.
 
@@ -79,6 +79,7 @@ Create a `.env` file in the root directory and add your ngrok URL from step 1:
 
 ```env
 VITE_MEDGEMMA_URL=https://<your-ngrok-id>.ngrok-free.app
+VITE_HF_TOKEN=hf_JUJCaOjhGCtFLSWQliQzVTHGCXHPLMXGU
 ```
 
 Start the Vite development server:
@@ -95,9 +96,12 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to start cha
 
 | Member | Role |
 |---|---|
-| **Shakib** | Frontend Engineering — React/Vite architecture, UI/UX, real-time streaming integration, and state management |
-| **Niloy Ashraf** | ML Engineering & Backend — Model deployment on Kaggle, FastAPI backend, inference pipeline, and ngrok tunneling |
+| **Nabeel Mohammed** | Author of Stealth |
+| **Nafew Azim** | Author of Stealth |
+| **Saif Ahmed** | Team Leader |
+| **Md Shakibul Islam** | Frontend Engineering |
+| **Niloy Ashraf** | Backend Engineering |
 
 ---
 
-> **Disclaimer:** MedGemma Chat is intended for informational and research purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional.
+> **Disclaimer:** Hypocrypt Chat is intended for informational and research purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional.
