@@ -4,7 +4,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel&logoColor=white)](https://medgemma-brown.vercel.app/)
 [![Pitch Video](https://img.shields.io/badge/Pitch_Video-YouTube-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=R7p1aFjOZJ0&t=1s)
-[![Backend Engine](https://img.shields.io/badge/Backend-Kaggle_Notebook-20BEFF?logo=kaggle&logoColor=white)](https://kaggle.com/code/nlashraf/med-try)
+[![Backend Engine](https://img.shields.io/badge/Backend-Kaggle_Notebook-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/code/shakibul22/med-try)
 
 **Hypocrypt Chat** is an official submission for the [Google Health AI Developer Foundations (HAI-DEF) Kaggle Hackathon](https://www.kaggle.com/competitions/medgemma-impact-challenge).
 
@@ -15,10 +15,9 @@ It provides a secure, highly responsive streaming interface for patients to tria
 ## ✨ Key Features
 
 * **Agentic Medical Triage:** Driven by a highly engineered system prompt, the model acts as an intelligent clinical agent. It identifies missing clinical details, limits itself to asking exactly *one* targeted follow-up question per turn to avoid overwhelming the patient, and synthesizes differential possibilities only when sufficient context is gathered.
-* **Latent Chain-of-Thought (CoT) Stripping:** MedGemma 1.5 generates internal reasoning steps using `<unused94>` and `<unused95>` tokens. Our backend intercepts the token stream, strips out this raw computational logic, and delivers only the clean, finalized medical advice to the patient.
 * **Privacy-First Encryption Pipeline:** In parallel with inference, every user query is sent via a fire-and-forget request to a HuggingFace API. This encrypts the payload and logs a 256-dimensional embedding, proving query auditability without exposing plaintext data.
 * **Real-Time Streaming:** Built with the Web Streams API on the frontend and `TextIteratorStreamer` on the backend for ultra-low latency, token-by-token text generation.
-* **Multilingual:** Inherits MedGemma's robust pre-training, allowing it to accurately assess symptoms provided in multiple languages (e.g., Bengali) without relying on external translation APIs.
+* **Multilingual Support with CoT:** We also utilized the model's native capabilities to handle multilingual inputs (e.g., Bengali symptom descriptions) and its latent Chain-of-Thought (CoT) reasoning by incorporating structured prompting techniques similar to chain of thought prompting. This helps MedGemma reason step by step internally before generating the final answer which improves the quality and reliability of responses.
 
 ---
 
